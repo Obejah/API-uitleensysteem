@@ -1,6 +1,7 @@
 using API_uitleensysteem.Models;
 using Microsoft.EntityFrameworkCore;
 using API_uitleensysteem.Repos;
+using Microsoft.OpenApi.Models;
 
 namespace API_uitleensysteem
 {
@@ -17,11 +18,12 @@ namespace API_uitleensysteem
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IProductsRepo, ProductRepo>();
-            services.AddDbContext<ProductsContext>(o => o.UseSqlServer("Data source=products.db")); //todo: maak deze database aan!
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
+            services.AddDbContext<ProductsContext>(o => o.UseSqlite("Data source=ProductenDatabase.db"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "API_uitleensysteem", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API_uitleensysteem", Version = "v1" });
             });
         }
 
@@ -31,6 +33,8 @@ namespace API_uitleensysteem
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProductAPI v1"));
             }
 
             app.UseHttpsRedirection();

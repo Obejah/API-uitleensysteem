@@ -6,10 +6,27 @@ namespace API_uitleensysteem.Repos
     public class ProductRepo : IProductsRepo
     {
         private readonly ProductsContext _context;
-        public ProductRepo(ProductRepo context)
+
+        public ProductRepo(ProductsContext context)
         {
             _context = context;
         }
+
+        public async Task<Products> Create(Products product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
+
+        public async Task Delete(int id)
+        {
+            var productToDelte = await _context.Products.FindAsync(id);
+            _context.Products.Remove(productToDelte);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Products>> Get()
         {
             return await _context.Products.ToListAsync();
@@ -19,32 +36,11 @@ namespace API_uitleensysteem.Repos
         {
             return await _context.Products.FindAsync(id);
         }
-        public async Task<Products> Create(Products products)
-        {
-            _context.Products.Add(products);
-            await _context.SaveChangesAsync();
 
-            return products;
-        }
-        public async Task Update(Products products)
+        public async Task Update(Products product)
         {
-            _context.Entry(products).State = EntityState.Modified;
+            _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-        }
-        public async Task Delete(int id)
-        {
-            var productToDelete = await _context.Products.FindAsync(id);
-            _context.Products.Remove(productToDelete);
-            await _context.SaveChangesAsync();
-        }
-        Task IProductsRepo.Update(Products products)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task IProductsRepo.Delete(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

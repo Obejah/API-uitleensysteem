@@ -10,12 +10,7 @@ namespace API_uitleensysteem.Models
         {
             Database.EnsureCreated();       
         }
-        // TODO: database anamaken in SQL Server MANAGEMENT STUDIO 
         public DbSet<Products> Products { get; set; }
-        // TODO: Verwijder onderstaande code en zorg dat het functioneerd met alleen de bovenstaande code
-        public static implicit operator ProductsContext(ProductRepo v)
-        {
-            throw new NotImplementedException();
-        }
+        public DbSet<Category> Category { get; set; }
     }
 }

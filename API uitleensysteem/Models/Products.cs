@@ -2,17 +2,17 @@
 {
     public class Products
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
-        
-        public int ProductId { get; set; }
-        
+
+        public int ID { get; set; }
+
+        public string CategoryID { get; set; }
+
         public string Status { get; set; }
-        
-        public string Category { get; set; }
 
         public string Description { get; set; }
+
+        public string remark { get; set; }
     }
 
 }

@@ -1,11 +1,6 @@
 ﻿using API_uitleensysteem.Models;
 using API_uitleensysteem.Repos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace API_uitleensysteem.Controller
 {
@@ -13,41 +8,41 @@ namespace API_uitleensysteem.Controller
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductsRepo _productsRepo;
+        private readonly IProductsRepo _productRepository;
 
-        public ProductsController(IProductsRepo productsRepo)
+        public ProductsController(IProductsRepo productRepository)
         {
-            _productsRepo = productsRepo;
+            _productRepository = productRepository;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Products>> GetProducts()
         {
-            return await _productsRepo.Get();
+            return await _productRepository.Get();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Products>> GetProducts(int id)
         {
-            return await _productsRepo.Get(id);
+            return await _productRepository.Get(id);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Products>> PostBooks([FromBody] Products product)
+        public async Task<ActionResult<Products>> PostProducts([FromBody] Products product)
         {
-            var newProduct = await _productsRepo.Create(product);
-            return CreatedAtAction(nameof(GetProducts), new { id = newProduct.Id }, newProduct);
+            var newProduct = await _productRepository.Create(product);
+            return CreatedAtAction(nameof(GetProducts), new { id = newProduct.ID }, newProduct);
         }
 
         [HttpPut]
         public async Task<ActionResult> PutProducts(int id, [FromBody] Products product)
         {
-            if (id != product.Id)
+            if (id != product.ID)
             {
                 return BadRequest();
             }
 
-            await _productsRepo.Update(product);
+            await _productRepository.Update(product);
 
             return NoContent();
         }
@@ -55,11 +50,11 @@ namespace API_uitleensysteem.Controller
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var productToDelte = await _productsRepo.Get(id);
+            var productToDelte = await _productRepository.Get(id);
             if (productToDelte == null)
                 return NotFound();
 
-            await _productsRepo.Delete(productToDelte.Id);
+            await _productRepository.Delete(productToDelte.ID);
             return NoContent();
         }
     }
